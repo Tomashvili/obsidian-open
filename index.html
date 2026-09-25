@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Open in Obsidian</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; margin: 0; padding: 32px 16px; background: #fff; color: #222; }
+  a { color: #7c3aed; font-size: 18px; }
+  p { max-width: 480px; margin: 0 auto; text-align: center; }
+  code { background: #f3f3f3; padding: 2px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<p id="msg">Opening in Obsidian…</p>
+<p><a id="link" href="#" hidden>Open in Obsidian</a></p>
+<script>
+(function () {
+  // Only ever builds obsidian://open?vault=Notes&file=<note>. Nothing else.
+  var VAULT = 'Notes';
+  var src = location.hash.length > 1 ? location.hash.slice(1) : location.search.slice(1);
+  var m = /(?:^|&)f=([^&]*)/.exec(src);
+  var f = '';
+  try { f = m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : ''; } catch (e) { f = ''; }
+  f = f.replace(/^\/+/, '').replace(/\.md$/i, '').trim();
+  var msg = document.getElementById('msg');
+  var link = document.getElementById('link');
+  if (!f || f.indexOf('..') !== -1 || /[\u0000-\u001f]/.test(f)) {
+    msg.textContent = 'No note given. Use #f=Folder/Note-name';
+    return;
+  }
+  var url = 'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent(f);
+  link.href = url;
+  link.textContent = 'Open "' + f + '" in Obsidian';
+  link.hidden = false;
+  msg.textContent = 'Opening in Obsidian… if nothing happens, tap the link below.';
+  location.replace(url);
+})();
+</script>
+</body>
+</html>
