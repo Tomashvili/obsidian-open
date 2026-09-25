@@ -30,7 +30,10 @@
     msg.textContent = 'No note given. Use #f=Folder/Note-name';
     return;
   }
-  var url = 'obsidian://open?vault=' + encodeURIComponent(VAULT) + '&file=' + encodeURIComponent(f);
+  // Optional v= : vault name override; v=- omits the vault (Obsidian uses the current/last vault).
+  var vm = /(?:^|&)v=([^&]*)/.exec(src);
+  var vault = vm ? decodeURIComponent(vm[1]) : VAULT;
+  var url = 'obsidian://open?' + (vault === '-' ? '' : 'vault=' + encodeURIComponent(vault) + '&') + 'file=' + encodeURIComponent(f);
   link.href = url;
   link.textContent = 'Open "' + f + '" in Obsidian';
   link.hidden = false;
